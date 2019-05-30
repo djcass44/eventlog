@@ -15,18 +15,19 @@
  *
  */
 
-package dev.castive.eventlog
+package dev.castive.eventlog.schema
 
-import dev.castive.eventlog.io.NOutputStream
-import dev.castive.eventlog.schema.Event
-import java.io.OutputStreamWriter
-import java.nio.charset.StandardCharsets
+import java.util.*
 
-object EventLog {
-	val stream = NOutputStream()
-	private val writer = OutputStreamWriter(stream, StandardCharsets.UTF_8)
-
-	fun post(event: Event, printFull: Boolean = false) {
-		writer.write(if(printFull) event.toString() else event.toSimpleString())
+enum class EventType {
+	CREATE, READ, UPDATE, DESTROY
+}
+data class Event(val uuid: UUID = UUID.randomUUID(),
+                 val type: EventType,
+                 val timestamp: Long = System.currentTimeMillis(),
+                 val resource: Class<out Any>,
+                 val causedBy: Class<out Any>?) {
+	fun toSimpleString(): String {
+		return "${resource.name} changed (${type.name}) on $timestamp, caused by ${causedBy?.name}"
 	}
 }
