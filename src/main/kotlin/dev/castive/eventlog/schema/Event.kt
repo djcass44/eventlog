@@ -19,15 +19,18 @@ package dev.castive.eventlog.schema
 
 import java.util.*
 
-enum class EventType {
-	CREATE, READ, UPDATE, DESTROY
+object EventType {
+	const val CREATE = "CREATE"
+	const val READ = "READ"
+	const val UPDATE = "UPDATE"
+	const val DESTROY = "DESTROY"
 }
 data class Event(val uuid: UUID = UUID.randomUUID(),
-                 val type: EventType,
+                 val type: String,
                  val timestamp: Long = System.currentTimeMillis(),
                  val resource: Class<out Any>,
                  val causedBy: Class<out Any>?) {
 	fun toSimpleString(): String {
-		return "${type.name} -> ${resource.name} at $timestamp, caused by ${causedBy?.name ?: "[Not specified]"}"
+		return "$type -> ${resource.name} at $timestamp, caused by ${causedBy?.name ?: "[Not specified]"}"
 	}
 }
