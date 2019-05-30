@@ -19,14 +19,14 @@ package dev.castive.eventlog
 
 import dev.castive.eventlog.io.NOutputStream
 import dev.castive.eventlog.schema.Event
-import java.io.OutputStreamWriter
 import java.nio.charset.StandardCharsets
 
 object EventLog {
 	val stream = NOutputStream()
-	private val writer = OutputStreamWriter(stream, StandardCharsets.UTF_8)
 
-	fun post(event: Event, printFull: Boolean = false) {
-		writer.write(if(printFull) event.toString() else event.toSimpleString())
+	fun post(event: Event, printFull: Boolean = false): String {
+		val t = if(printFull) event.toString() else event.toSimpleString()
+		stream.write("$t\n".toByteArray(StandardCharsets.UTF_8))
+		return t
 	}
 }

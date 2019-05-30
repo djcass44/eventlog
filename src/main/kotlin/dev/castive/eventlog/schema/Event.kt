@@ -28,6 +28,6 @@ data class Event(val uuid: UUID = UUID.randomUUID(),
                  val resource: Class<out Any>,
                  val causedBy: Class<out Any>?) {
 	fun toSimpleString(): String {
-		return "${resource.name} changed (${type.name}) on $timestamp, caused by ${causedBy?.name}"
+		return "${type.name} -> ${resource.name} at $timestamp, caused by ${causedBy?.name ?: "[Not specified]"}"
 	}
 }
